@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.User;
 import utility.BasicEligibility;
-import utility.EligibiltyCheck;
+import utility.EligibilityCheck;
 
 @WebServlet(urlPatterns= {"/eligible"})
 public class EligibilityViewController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-      
+       
+
     public EligibilityViewController() {
         super();
        
@@ -24,7 +25,7 @@ public class EligibilityViewController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		RequestDispatcher rd=this.getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
+		RequestDispatcher rd=this.getServletContext().getRequestDispatcher("/index.jsp");
 		rd.forward(request, response);
 	}
 
@@ -37,19 +38,22 @@ public class EligibilityViewController extends HttpServlet {
 		int height=Integer.parseInt(request.getParameter("height"));
 		int weight=Integer.parseInt(request.getParameter("weight"));
 		String country=request.getParameter("country");
+		String answers="1,2,3,4,5,6,7,8,9,10";
 		
-	
 		User user = new User(name,number,age,height,weight,country);
 		user.setName(name);
 		user.setNumber(number);
 		user.setAge(age);
 		user.setHeight(height);
 		user.setWeight(weight);
+		user.setCountry(country);
 		
-		System.out.println(spaceEligible);
+		BasicEligibility eligible=new EligibilityCheck();
+		boolean spaceEligible = eligible.basicEligibilityCheck(user);
+		
 			if(spaceEligible)
 			{
-				RequestDispatcher rd=this.getServletContext().getRequestDispatcher("/WEB-INF/views/quiz.jsp");
+				RequestDispatcher rd=this.getServletContext().getRequestDispatcher("/quiz.jsp");
 				rd.forward(request, response);	
 			}
 			else
